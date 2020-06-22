@@ -1,6 +1,6 @@
 from django.http import JsonResponse
-
-
+import time
+from django.shortcuts import render
 # 查询文章
 # def select_article(request):
 #     return JsonResponse({"status":True})
@@ -85,3 +85,22 @@ def selectGroup(request):
         'status':True
     }
     return JsonResponse(rejson)
+
+
+def installArticle(request):
+    title = request.GET['title']
+    centen = request.GET['centen']
+    group = request.GET['group']
+    article = Article()
+    article.title = title
+    article.content = centen
+    article.group = group
+    datetime = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+    article.createTime = datetime
+    # 保存数据
+    article.save()
+    return JsonResponse({"code":200})
+
+
+def index(request):
+    return render(request,'index.html')
