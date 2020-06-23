@@ -101,6 +101,16 @@ def installArticle(request):
     article.save()
     return JsonResponse({"code":200})
 
-
+# 跳转到新增页面
 def index(request):
     return render(request,'index.html')
+
+# 通过文章id删除
+def deleteArticle(request):
+    id = request.GET['id']
+    Article.objects.filter(id=id).delete()
+    return JsonResponse({"code":200})
+
+# 跳转到删除页面
+def delete(request):
+    return render(request, 'delete.html')
