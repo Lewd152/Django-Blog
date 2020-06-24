@@ -22,26 +22,37 @@ def selectAll(request):
     result = Article.objects.filter()
     # 设置一个分页，
     page = Paginator(result,6)
+
     # 获取当前页的数据
     # 获取异常
     try:
         page_data = page.page(num)
     except PageNotAnInteger:
-        # 返回第一页数据
         page_data = page.page(1)
-        return JsonResponse({"code":1})
     except EmptyPage:
-        # 返回最后一页数据
         page_data = page.page(page.num_pages)
-        return JsonResponse({"code": 0})
 
     arr = []
     for i in page_data:
         content = {'id': i.id, 'title': i.title, 'content': i.content,'createdata': i.createTime,'group': i.group}
         arr.append(content)
     print(arr)
+
+    # 返回上一页下一页
+    if num < 2 :
+        previous_page = 1
+    else:
+        previous_page = num - 1
+    if num > page.num_pages -1:
+        next_page = page.num_pages
+    else:
+        next_page = num +1
+
     rejson = {
         'data':arr,
+        'page_count':page.num_pages,
+        'previous_page':previous_page,
+        'next_page': next_page,
         'status':True
     }
     return JsonResponse(rejson)
