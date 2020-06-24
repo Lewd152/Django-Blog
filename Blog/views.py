@@ -21,7 +21,7 @@ def selectAll(request):
     # 查询所有数据
     result = Article.objects.filter()
     # 设置一个分页，
-    page = Paginator(result,4)
+    page = Paginator(result,6)
     # 获取当前页的数据
     # 获取异常
     try:
