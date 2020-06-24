@@ -7,20 +7,36 @@ from django.shortcuts import render
 
 
 from TestBlog.models import Article
+# PageNotAnInteger 判断页面传入的参数异常
+# EmptyPage  判断不存在的页面
+from django.core.paginator import Paginator,PageNotAnInteger,EmptyPage
 import random
 """
 插入测试数据
 """
 def selectAll(request):
+    #获取前端传入的页码
+    n = request.GET.get('num',1)
+    num = int(n)
     # 查询所有数据
     result = Article.objects.filter()
-    print(result)
-    """
-    result为<class 'django.db.models.query.QuerySet'>的对象
-    需要进行数据处理
-    """
+    # 设置一个分页，
+    page = Paginator(result,4)
+    # 获取当前页的数据
+    # 获取异常
+    try:
+        page_data = page.page(num)
+    except PageNotAnInteger:
+        # 返回第一页数据
+        page_data = page.page(1)
+        return JsonResponse({"code":1})
+    except EmptyPage:
+        # 返回最后一页数据
+        page_data = page.page(page.num_pages)
+        return JsonResponse({"code": 0})
+
     arr = []
-    for i in result:
+    for i in page_data:
         content = {'id': i.id, 'title': i.title, 'content': i.content,'createdata': i.createTime,'group': i.group}
         arr.append(content)
     print(arr)
