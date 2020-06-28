@@ -1,6 +1,7 @@
 from django.http import JsonResponse
 import time
 from django.shortcuts import render
+import requests
 # 查询文章
 # def select_article(request):
 #     return JsonResponse({"status":True})
@@ -141,3 +142,4 @@ def deleteArticle(request):
 # 跳转到删除页面
 def delete(request):
     return render(request, 'delete.html')
+
